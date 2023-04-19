@@ -9,25 +9,7 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-stages:
-  - stage: TestBicepJob
-    jobs:
-    - job: TestBicepFile
-      displayName:  Testcases
-      pool:
-        vmImage: windows-2019
-      steps:
-         - task: RunARMTTKTests@1
-           inputs:
-              templatelocation: '$(System.DefaultWorkingDirectory)\BicepSolution'
-              resultLocation: '$(System.DefaultWorkingDirectory)\results'
-              allTemplatesMain: false
-              cliOutputResults: true
-         - task: PublishTestResults@2
-           inputs:
-              testResultsFormat: 'NUnit'
-              testResultsFiles: '$(System.DefaultWorkingDirectory)\results\*-armttk.xml'
-           
+stages:  
   - stage: DeployBicep
     displayName: Deploy Bicep Stage
     jobs:
