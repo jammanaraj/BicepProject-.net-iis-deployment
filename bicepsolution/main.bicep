@@ -12,7 +12,7 @@ module webappdeployment 'Modules/webapp.bicep' = {
 module storagedeployment 'Modules/storage.bicep' = {
   name: 'storagedeployment'
   params: {
-    storageaccountname: 'BicepPoc'
+    storageaccountname: 'bicepdata'
     location: location
   }
 }
