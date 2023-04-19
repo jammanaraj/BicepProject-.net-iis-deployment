@@ -1,6 +1,6 @@
 @description('App service name')
 param webappname string
-param location string = resourceGroup().location
+param location string = 'eastus'
 resource azureasp 'Microsoft.Web/serverfarms@2021-03-01' = {
   name: 'biceppoc'
   location: location
