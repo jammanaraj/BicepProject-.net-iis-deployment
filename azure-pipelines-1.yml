@@ -15,7 +15,7 @@ stages:
     - job: TestBicepFile
       displayName:  Testcases
       pool:
-        vmImage: ubuntu-latest
+        vmImage: windows-2019
       steps:
          - task: RunARMTTKTests@1
            inputs:
@@ -31,22 +31,11 @@ stages:
   - stage: DeployBicep
     displayName: Deploy Bicep Stage
     jobs:
-       - job: waitforvalidation
-         displayName: Wait for validation
-         timeoutInMinutes: 4200
-         steps:
-           - task: ManualValidation@0
-             timeoutInMinutes: 1400
-             inputs:
-               notifyUsers: prayanka.gochipatula@valuemomentum.com
-               instructions: "New build triggered, please validate $(Build.BuildId)"
-               onTimeout: resume
-
        - job: deploytoazure
          displayName: Deploytoazure
          pool:
           vmImage: ubuntu-latest
-         dependsOn: waitforvalidation
+         dependsOn: TestBicepFile
          variables:
               Resource-Group: 'BicepPoc'
               location: 'eastus'
