@@ -16,7 +16,7 @@ stages:
        - job: deploytoazure
          displayName: Deploytoazure
          variables:
-              Resource-Group: 'BicepPoc'
+              Resource-Group: 'bicepdata'
               location: 'eastus'
 
          steps:
