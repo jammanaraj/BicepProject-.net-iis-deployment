@@ -33,9 +33,6 @@ stages:
     jobs:
        - job: deploytoazure
          displayName: Deploytoazure
-         pool:
-          vmImage: ubuntu-latest
-         dependsOn: TestBicepFile
          variables:
               Resource-Group: 'BicepPoc'
               location: 'eastus'
