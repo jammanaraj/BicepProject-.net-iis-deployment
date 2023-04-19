@@ -27,7 +27,7 @@ stages:
            inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(System.DefaultWorkingDirectory)\results\*-armttk.xml'
-           condition: always(
+           
   - stage: DeployBicep
     displayName: Deploy Bicep Stage
     jobs:
