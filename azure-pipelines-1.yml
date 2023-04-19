@@ -15,7 +15,7 @@ stages:
     - job: TestBicepFile
       displayName:  Testcases
       pool:
-        vmImage: windows-2022
+        vmImage: ubuntu-latest
       steps:
          - task: RunARMTTKTests@1
            inputs:
