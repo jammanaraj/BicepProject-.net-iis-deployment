@@ -15,7 +15,7 @@ stages:
     - job: TestBicepFile
       displayName:  TestBicepfile
       pool:
-        vmImage: windows-2019
+        vmImage: ubuntu-latest
       steps:
          - task: RunARMTTKTests@1
            inputs:
