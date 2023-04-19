@@ -8,3 +8,11 @@ module webappdeployment 'Modules/webapp.bicep' = {
     location: location
   }
 }
+
+module storagedeployment 'Modules/storage.bicep' = {
+  name: 'storagedeployment'
+  params: {
+    storageaccountname: 'BicepPoc'
+    location: location
+  }
+}
