@@ -31,4 +31,4 @@ stages:
                   az deployment group create `
                     --resource-group $(Resource-Group) `
                     --template-file main.bicep
-                workingDirectory: '$(System.DefaultWorkingDirectory)/_BicepPoc-CI/drop'
+                workingDirectory: '$(System.DefaultWorkingDirectory)/bicepsolution/'
