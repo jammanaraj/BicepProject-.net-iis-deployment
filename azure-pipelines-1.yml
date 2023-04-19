@@ -1,0 +1,30 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: TestBicepJob
+    jobs:
+    - job: TestBicepFile
+      displayname: TestBicepfile
+      pool:
+        vmImage: windows-2019
+      steps:
+         - task: RunARMTTKTests@1
+           inputs:
+              templatelocation: '$(System.DefaultWorkingDirectory)\BicepSolution'
+              resultLocation: '$(System.DefaultWorkingDirectory)\results'
+              allTemplatesMain: false
+              cliOutputResults: true
+         - task: PublishTestResults@2
+           inputs:
+              testResultsFormat: 'NUnit'
+              testResultsFiles: '$(System.DefaultWorkingDirectory)\results\*-armttk.xml'
+           condition: always()
