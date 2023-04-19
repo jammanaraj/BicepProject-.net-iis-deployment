@@ -13,9 +13,9 @@ stages:
   - stage: TestBicepJob
     jobs:
     - job: TestBicepFile
-      displayName:  TestBicepfile
+      displayName:  Testcases
       pool:
-        vmImage: ubuntu-latest
+        vmImage: windows-2022
       steps:
          - task: RunARMTTKTests@1
            inputs:
@@ -46,7 +46,7 @@ stages:
          displayName: Deploytoazure
          pool:
           vmImage: ubuntu-latest
-         dependsOn: waitforvalidation
+         dependsOn: [waitforvalidation]
          variables:
               Resource-Group: 'BicepPoc'
               location: 'eastus'
