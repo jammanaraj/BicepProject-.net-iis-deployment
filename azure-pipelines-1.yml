@@ -13,7 +13,7 @@ stages:
   - stage: TestBicepJob
     jobs:
     - job: TestBicepFile
-      displayname: TestBicepfile
+      displayName:  TestBicepfile
       pool:
         vmImage: windows-2019
       steps:
@@ -27,4 +27,38 @@ stages:
            inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(System.DefaultWorkingDirectory)\results\*-armttk.xml'
-           condition: always()
+           condition: always(
+  - stage: DeployBicep
+    displayName: Deploy Bicep Stage
+    jobs:
+       - job: waitforvalidation
+         displayName: Wait for validation
+         timeoutInMinutes: 4200
+         steps:
+           - task: ManualValidation@0
+             timeoutInMinutes: 1400
+             inputs:
+               notifyUsers: prayanka.gochipatula@valuemomentum.com
+               instructions: "New build triggered, please validate $(Build.BuildId)"
+               onTimeout: resume
+
+       - job: deploytoazure
+         displayName: Deploytoazure
+         dependsOn: waitforvalidation
+         variables:
+              Resource-Group: 'BicepPoc'
+              location: 'eastus'
+
+         steps:
+            - task: AzureCLI@2
+              displayName: 'Azure CLI '
+              inputs:
+                azureSubscription: 'Pay-As-You-Go (a33c45cf-25ce-42d7-910b-5a0b8c55dd32)'
+                scriptType: pscore
+                scriptLocation: inlineScript
+                inlineScript: |
+                  az group create --name $(Resource-Group) --location $(location)
+                  az deployment group create `
+                    --resource-group $(Resource-Group) `
+                    --template-file main.bicep
+                workingDirectory: '$(System.DefaultWorkingDirectory)/_BicepPoc-CI/drop'
