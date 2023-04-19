@@ -46,7 +46,7 @@ stages:
          displayName: Deploytoazure
          pool:
           vmImage: ubuntu-latest
-         dependsOn: [waitforvalidation]
+         dependsOn: waitforvalidation
          variables:
               Resource-Group: 'BicepPoc'
               location: 'eastus'
