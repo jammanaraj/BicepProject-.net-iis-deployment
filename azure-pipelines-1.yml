@@ -34,6 +34,8 @@ stages:
        - job: waitforvalidation
          displayName: Wait for validation
          timeoutInMinutes: 4200
+         pool:
+          vmImage: ubuntu-latest
          steps:
            - task: ManualValidation@0
              timeoutInMinutes: 1400
