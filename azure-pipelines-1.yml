@@ -33,9 +33,7 @@ stages:
     jobs:
        - job: waitforvalidation
          displayName: Wait for validation
-         timeoutInMinutes: 4200
-         pool:
-          vmImage: ubuntu-latest
+         timeoutInMinutes: 4200         
          steps:
            - task: ManualValidation@0
              timeoutInMinutes: 1400
@@ -47,6 +45,8 @@ stages:
        - job: deploytoazure
          displayName: Deploytoazure
          dependsOn: waitforvalidation
+         pool:
+          vmImage: ubuntu-latest
          variables:
               Resource-Group: 'BicepPoc'
               location: 'eastus'
