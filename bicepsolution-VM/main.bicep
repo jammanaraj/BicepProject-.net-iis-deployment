@@ -12,7 +12,7 @@ param adminUsername string
 param adminPassword string
 
 @description('Desired Size of the VM. Any valid option accepted but if you choose premium storage type you must choose a DS class VM size.')
-param vmSize string = 'Standard_NV6'
+param vmSize string = 'Standard_F2'
 param virtualNetwork_name string = 'stream-vnet'
 param nic_name string = 'stream-nic'
 param publicIPAddress_name string = 'stream-ip'
