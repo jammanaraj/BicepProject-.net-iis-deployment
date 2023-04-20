@@ -92,11 +92,11 @@ resource pip 'Microsoft.Network/publicIPAddresses@2019-07-01' = {
   name: publicIPAddress_name
   location: location
   sku: {
-    name: 'Basic'
+    name: 'Standard'
   }
   properties: {
     publicIPAddressVersion: 'IPv4'
-    publicIPAllocationMethod: 'Dynamic'
+    publicIPAllocationMethod: 'Static'
     idleTimeoutInMinutes: 4
     dnsSettings: {
       domainNameLabel: dnsprefix
