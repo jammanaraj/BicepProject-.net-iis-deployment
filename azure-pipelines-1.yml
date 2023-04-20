@@ -31,4 +31,5 @@ stages:
                   az deployment group create `
                     --resource-group $(Resource-Group) `
                     --template-file main.bicep
+                    --parameters azuredeploy.parameters.json
                 workingDirectory: '$(System.DefaultWorkingDirectory)/bicepsolution-VM/'
