@@ -30,12 +30,12 @@ stages:
               enabled: true
               inputs:
                 command: restore
-                projects: '$(Parameters.RestoreBuildProjects)'
+                projects: '$(SolutionPath)'
 
             - task: DotNetCoreCLI@2
               displayName: Build
               inputs:
-                projects: '$(Parameters.RestoreBuildProjects)'
+                projects: '$(SolutionPath)'
                 arguments: '--configuration $(BuildConfiguration)'
 
             - task: DotNetCoreCLI@2
