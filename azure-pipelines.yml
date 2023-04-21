@@ -25,6 +25,7 @@ stages:
          steps:
             - task: DotNetCoreCLI@2
               displayName: Restore
+              enabled: false
               inputs:
                 command: restore
                 projects: '$(Parameters.RestoreBuildProjects)'
