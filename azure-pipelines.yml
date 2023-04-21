@@ -71,7 +71,7 @@ stages:
          steps:
             - task: AzureCLI@2
               displayName: 'Azure CLI'
-              condition: contains(variables['Build.SourceBranch'], 'drop/')
+              condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
               enabled: true              
               inputs:
                 azureSubscription: 'Pay-As-You-Go (a33c45cf-25ce-42d7-910b-5a0b8c55dd32)'
@@ -88,7 +88,7 @@ stages:
   - stage: DeployDev
     displayName: DeployDev
     dependsOn: DeployBicep
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     jobs:
     - deployment: Dev
       displayName: Dev
