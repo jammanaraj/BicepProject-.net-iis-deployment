@@ -16,6 +16,8 @@ variables:
   projectName: 'BicepPoc'
   websiteName: 'Donetsitetest'
   appPoolName: 'Donetsitetest'
+  BuildConfiguration: 'Release'
+  SolutionPath: 'samples-dotnet-helloworld.sln'
   
 stages:  
   - stage: BuildApplication
@@ -26,7 +28,7 @@ stages:
          steps:
             - task: DotNetCoreCLI@2
               displayName: Restore
-              enabled: false
+              enabled: true
               inputs:
                 command: restore
                 projects: '$(Parameters.RestoreBuildProjects)'
