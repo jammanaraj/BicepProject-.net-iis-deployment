@@ -181,7 +181,7 @@ resource vm_name_GPUDrivers 'Microsoft.Compute/virtualMachines/extensions@2019-0
 resource vmIISEnabled 'Microsoft.Compute/virtualMachines/runCommands@2022-03-01' = {
   name: 'vm-EnableIIS-Script'
   location: location
-  parent: vm
+  parent: vm_name_resource
   properties: {
     asyncExecution: false
     source: {
