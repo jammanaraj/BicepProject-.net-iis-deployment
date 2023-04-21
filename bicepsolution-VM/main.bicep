@@ -178,10 +178,6 @@ resource vm_name_GPUDrivers 'Microsoft.Compute/virtualMachines/extensions@2019-0
   ]
 }
 
-resource vm 'Microsoft.Compute/virtualMachines@2021-03-01' existing = {
-  name: vm_name
-}
-
 resource vmIISEnabled 'Microsoft.Compute/virtualMachines/runCommands@2022-03-01' = {
   name: 'vm-EnableIIS-Script'
   location: location
