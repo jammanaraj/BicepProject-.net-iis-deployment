@@ -18,7 +18,7 @@ variables:
 
 resources:
  pipelines:
-   - pipeline: BicepPoc
+   - pipeline: BicepPocTest
      source: dotnet_code
      branch: main
 stages:  
