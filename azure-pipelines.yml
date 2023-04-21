@@ -16,7 +16,6 @@ variables:
   projectName: 'BicepPoc'
   websiteName: 'Donetsitetest'
   appPoolName: 'Donetsitetest'
-  BuildConfiguration: 'Release'
   SolutionPath: 'samples-dotnet-helloworld.sln'
   
 stages:  
