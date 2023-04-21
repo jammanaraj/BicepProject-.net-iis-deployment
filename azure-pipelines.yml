@@ -81,9 +81,9 @@ stages:
                     --parameters azuredeploy.parameters.json
                 workingDirectory: '$(System.DefaultWorkingDirectory)/bicepsolution-VM/'
 
-  - stage: 'Dev'
-    displayName: 'Dev'
-    dependsOn: 'Build'
+  - stage: Dev
+    displayName: Dev
+    dependsOn: BuildApplication
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     jobs:
     - deployment: Dev
