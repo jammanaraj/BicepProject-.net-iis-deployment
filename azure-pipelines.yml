@@ -3,6 +3,7 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+
 trigger:
 - main
 
@@ -15,6 +16,11 @@ variables:
   websiteName: 'Donetsitetest'
   appPoolName: 'Donetsitetest'
 
+resources:
+ pipelines:
+   - pipeline: BicepPoc
+     source: dotnet_code
+     branch: main
 stages:  
   - stage: BuildApplication
     displayName: Build Application
