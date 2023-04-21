@@ -1,0 +1,132 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: 'Release'
+  projectName: 'BicepPoc'
+  websiteName: 'Donetsitetest'
+  appPoolName: 'Donetsitetest'
+
+stages:  
+  - stage: BuildApplication
+    displayName: Build Application
+    jobs:
+       - job: buildapplication
+         displayName: BuildApplication
+         steps:
+            - task: DotNetCoreCLI@2
+              displayName: Restore
+              inputs:
+                command: restore
+                projects: '$(Parameters.RestoreBuildProjects)'
+
+            - task: DotNetCoreCLI@2
+              displayName: Build
+              inputs:
+                projects: '$(Parameters.RestoreBuildProjects)'
+                arguments: '--configuration $(BuildConfiguration)'
+
+            - task: DotNetCoreCLI@2
+              displayName: Test
+              inputs:
+                command: test
+                projects: '$(Parameters.TestProjects)'
+                arguments: '--configuration $(BuildConfiguration)'
+
+            - task: DotNetCoreCLI@2
+              displayName: Publish
+              inputs:
+                command: publish
+                publishWebProjects: True
+                arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
+                zipAfterPublish: True
+
+            - task: PublishBuildArtifacts@1
+              displayName: 'Publish Artifact'
+              inputs:
+                PathtoPublish: '$(build.artifactstagingdirectory)'
+              condition: succeededOrFailed()
+
+  - stage: DeployBicep
+    displayName: Deploy Bicep VM Stage
+    jobs:
+       - job: deploytoazure
+         displayName: Deploytoazure
+         variables:
+              Resource-Group: 'bicepdata'
+              location: 'eastus'
+
+         steps:
+            - task: AzureCLI@2
+              displayName: 'Azure CLI'
+              condition: contains(variables['Build.SourceBranch'], 'drop/')
+              enabled: true              
+              inputs:
+                azureSubscription: 'Pay-As-You-Go (a33c45cf-25ce-42d7-910b-5a0b8c55dd32)'
+                scriptType: pscore
+                scriptLocation: inlineScript
+                inlineScript: |
+                  az group create --name $(Resource-Group) --location $(location)
+                  az deployment group create `
+                    --resource-group $(Resource-Group) `
+                    --template-file main.bicep `
+                    --parameters azuredeploy.parameters.json
+                workingDirectory: '$(System.DefaultWorkingDirectory)/bicepsolution-VM/'
+
+  - stage: 'Dev'
+    displayName: 'Dev'
+    dependsOn: 'Build'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    jobs:
+    - deployment: Dev
+      displayName: Dev
+      environment: 
+        name: 'Dev'    
+        resourceType: VirtualMachine
+      variables:
+      - name: websitePhysicalPath
+        value: '%SystemDrive%\inetpub\wwwroot\$(websiteName)'
+
+      strategy:
+        runOnce:
+          deploy:
+            steps: 
+            - task: IISWebAppManagementOnMachineGroup@0
+              inputs:            
+                IISDeploymentType: 'IISWebsite'
+                ActionIISWebsite: 'CreateOrUpdateWebsite'
+                WebsiteName: '$(websiteName)'
+                WebsitePhysicalPath: '$(websitePhysicalPath)'
+                WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
+                CreateOrUpdateAppPoolForWebsite: true
+                AppPoolNameForWebsite: '$(appPoolName)'
+                DotNetVersionForWebsite: 'No Managed Code'
+                PipeLineModeForWebsite: 'Integrated'
+                AppPoolIdentityForWebsite: 'ApplicationPoolIdentity'
+                AddBinding: true
+                Bindings: |
+                    {
+                        bindings:[
+                            {
+                                "protocol":"http",
+                                "ipAddress":"",
+                                "hostname":"",
+                                "port":"80",
+                                "sslThumbprint":"",
+                                "sniFlag":false
+                            }
+                        ]
+                    }
+            - task: IISWebAppDeploymentOnMachineGroup@0
+              inputs:
+                WebSiteName: '$(websiteName)'
+                Package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/$(projectName).zip'
+

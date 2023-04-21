@@ -9,31 +9,25 @@
             "value": "VAMDEMOBICEP"
         },
         "adminUsername": {
-            "value": "GEN-UNIQUE"
+            "value": "BICEP-POC"
         },
         "adminPassword": {
             "value": "April@2023"
         },
         "virtualNetwork_name": {
-            "value": "GEN-VNET-NAME"
+            "value": "BICEP-VNET-NAME"
         },
         "nic_name": {
-            "value": "GEN-UNIQUE-8"
+            "value": "BICEP-POC-8"
         },
         "publicIPAddress_name": {
-            "value": "GEN-UNIQUE-8"
+            "value": "BICEP-POC-8"
         },
         "dnsprefix": {
             "value": "hello-987"
         },
         "networkSecurityGroup_name": {
-            "value": "GEN-UNIQUE-8"
-        },
-        "scriptFileName": {
-            "value": "ChocoInstall.ps1"
-        },
-        "chocoPackages": {
-            "value": "obs-studio;skype;obs-ndi"
+            "value": "BICEP-POC-8"
         }
     }
 }

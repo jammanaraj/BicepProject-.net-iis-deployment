@@ -19,18 +19,9 @@ param publicIPAddress_name string = 'stream-ip'
 param dnsprefix string = 'streamvm'
 param networkSecurityGroup_name string = 'stream-nsg'
 
-@description('PowerShell script name to execute')
-param scriptFileName string = 'ChocoInstall.ps1'
-
-@description('List of Chocolatey packages to install separated by a semi-colon eg. linqpad;sysinternals')
-param chocoPackages string = 'obs-studio;skype'
-
 var vmImagePublisher = 'MicrosoftWindowsDesktop'
 var vmImageOffer = 'Windows-10'
 var sku = '20h2-evd'
-
-@description('Public uri location of PowerShell Chocolately setup script')
-var scriptLocation = 'https://gist.githubusercontent.com/daveRendon/9649e6ffeeb1669c9179fa13a7f43c5f/raw/54f6f7ba5bd2862d1972ab52c3a3c56be14c0397/ChocoInstall.ps1'
 
 resource networkSecurityGroup_name_resource 'Microsoft.Network/networkSecurityGroups@2019-07-01' = {
   name: networkSecurityGroup_name
@@ -183,27 +174,27 @@ resource vm_name_GPUDrivers 'Microsoft.Compute/virtualMachines/extensions@2019-0
     autoUpgradeMinorVersion: true
   }
   dependsOn: [
-    vm_name_SetupChocolatey
+    vmIISEnabled
   ]
 }
 
-resource vm_name_SetupChocolatey 'Microsoft.Compute/virtualMachines/extensions@2019-07-01' = {
-  parent: vm_name_resource
-  name: 'SetupChocolatey'
+resource vm 'Microsoft.Compute/virtualMachines@2021-03-01' existing = {
+  name: vm_name
+}
+
+resource vmIISEnabled 'Microsoft.Compute/virtualMachines/runCommands@2022-03-01' = {
+  name: 'vm-EnableIIS-Script'
   location: location
-  tags: {
-    displayName: 'config-choco'
-  }
+  parent: vm
   properties: {
-    publisher: 'Microsoft.Compute'
-    type: 'CustomScriptExtension'
-    typeHandlerVersion: '1.10'
-    autoUpgradeMinorVersion: true
-    settings: {
-      fileUris: [
-        scriptLocation
-      ]
-      commandToExecute: 'powershell -ExecutionPolicy bypass -File ${scriptFileName} -chocoPackages ${chocoPackages}'
+    asyncExecution: false
+    source: {
+      script: '''
+        Install-WindowsFeature -name Web-Server -IncludeManagementTools
+        Remove-Item C:\\inetpub\\wwwroot\\iisstart.htm
+        Add-Content -Path "C:\\inetpub\\wwwroot\\iisstart.htm" -Value $("Hello from " + $env:computername)  
+      '''
     }
   }
 }
+
