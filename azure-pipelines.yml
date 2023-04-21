@@ -15,12 +15,7 @@ variables:
   projectName: 'BicepPoc'
   websiteName: 'Donetsitetest'
   appPoolName: 'Donetsitetest'
-
-resources:
- pipelines:
-   - pipeline: BicepPocTest
-     source: dotnet_code
-     branch: main
+  
 stages:  
   - stage: BuildApplication
     displayName: Build Application
