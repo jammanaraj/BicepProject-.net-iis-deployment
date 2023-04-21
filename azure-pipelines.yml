@@ -16,7 +16,7 @@ variables:
   projectName: 'BicepPoc'
   websiteName: 'Donetsitetest'
   appPoolName: 'Donetsitetest'
-  SolutionPath: 'samples-dotnet-helloworld.sln'
+  SolutionPath: 'AzDevChaosTesting.sln'
   
 stages:  
   - stage: BuildApplication
