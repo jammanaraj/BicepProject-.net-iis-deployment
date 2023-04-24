@@ -72,7 +72,7 @@ stages:
             - task: AzureCLI@2
               displayName: 'Azure CLI'
               condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-              enabled: true              
+              enabled: false
               inputs:
                 azureSubscription: 'Pay-As-You-Go (a33c45cf-25ce-42d7-910b-5a0b8c55dd32)'
                 scriptType: pscore
